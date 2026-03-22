@@ -1,26 +1,50 @@
-export default function AlertLog({ alerts }) {
-  const color = { WARNING: 'orange', DANGER: 'red', SAFE: 'green' };
-  if (!alerts || alerts.length === 0) {
-    return (
-      <div>
-        <h4>Alert log</h4>
-        <p>No alerts yet.</p>
-      </div>
-    );
-  }
+const messages = {
+  SAFE: 'System stable',
+  WARNING: 'WhatsApp alert sent',
+  DANGER: 'WhatsApp + buzzer fired',
+};
+
+const labels = {
+  SAFE: 'Safe',
+  WARNING: 'Warning',
+  DANGER: 'Danger',
+};
+
+export default function AlertLog({ alerts, reading }) {
+  const rows = alerts.slice(0, 8);
+
   return (
-    <div>
-      <h4>Alert log</h4>
-      {alerts.map((a, i) => (
-        <div key={i} style={{ display: 'flex', gap: 12, padding: '8px 0',
-                             borderBottom: '1px solid #eee', fontSize: 13 }}>
-          <span style={{ color: color[a.status], fontWeight: 600 }}>{a.status}</span>
-          <span>{a.ppm} ppm</span>
-          <span style={{ marginLeft: 'auto', color: '#aaa' }}>
-            {new Date(a.timestamp).toLocaleTimeString()}
-          </span>
+    <section className="monitor-panel alert-panel">
+      <div className="alert-head">
+        <div>
+          <p className="panel-label">Alert log</p>
+          <h2>Recent events</h2>
         </div>
-      ))}
-    </div>
+      </div>
+
+      {rows.length ? (
+        <div className="alert-list">
+          {rows.map((alert, index) => (
+            <article key={`${alert.timestamp}-${index}`} className="alert-row">
+              <span className={`alert-badge ${alert.status.toLowerCase()}`}>
+                {labels[alert.status]}
+              </span>
+              <span className="alert-reading">{alert.ppm} ppm</span>
+              <span className="alert-message">{messages[alert.status]}</span>
+              <span className="alert-time">
+                {new Date(alert.timestamp).toLocaleTimeString([], {
+                  hour: 'numeric',
+                  minute: '2-digit',
+                })}
+              </span>
+            </article>
+          ))}
+        </div>
+      ) : (
+        <div className="empty-state">
+          {reading ? 'No warning or danger alerts yet.' : 'Waiting for first sensor reading.'}
+        </div>
+      )}
+    </section>
   );
 }

@@ -1,8 +1,16 @@
 import { render, screen } from '@testing-library/react';
-import App from './App';
 
-test('renders learn react link', () => {
+jest.mock('./api', () => ({
+  getReadings: jest.fn(),
+  getAlerts: jest.fn(),
+}));
+
+import App from './App';
+import * as api from './api';
+
+test('renders gas monitor heading', async () => {
+  api.getReadings.mockResolvedValue({ data: [] });
+  api.getAlerts.mockResolvedValue({ data: [] });
   render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+  expect(await screen.findByText(/LPG gas leak monitor/i)).toBeInTheDocument();
 });

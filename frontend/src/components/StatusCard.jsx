@@ -1,12 +1,19 @@
 export default function StatusCard({ reading }) {
-  if (!reading) return <p>Waiting for sensor...</p>;
-  const colors = { SAFE: 'green', WARNING: 'orange', DANGER: 'red' };
+  const status = reading?.status || 'SAFE';
+  const labels = { SAFE: 'Safe', WARNING: 'Warning', DANGER: 'Danger' };
+
   return (
-    <div style={{ border: '2px solid', borderColor: colors[reading.status],
-                  borderRadius: 12, padding: 24, marginBottom: 16, textAlign: 'center' }}>
-      <div style={{ fontSize: 14, color: colors[reading.status] }}>{reading.status}</div>
-      <div style={{ fontSize: 48, fontWeight: 600 }}>{reading.ppm}</div>
-      <div style={{ fontSize: 12, color: '#888' }}>current reading (ppm)</div>
-    </div>
+    <article className="monitor-panel status-panel">
+      <p className="panel-label">Current sensor state</p>
+      <div className={`status-chip ${status.toLowerCase()}`}>{labels[status]}</div>
+      <div className="reading-wrap">
+        <span className="reading-value">{reading?.ppm ?? '--'}</span>
+        <span className="reading-unit">ppm</span>
+      </div>
+      <p className="reading-caption">Current LPG concentration</p>
+      <p className="updated-at">
+        {reading ? `Last updated ${new Date(reading.timestamp).toLocaleTimeString()}` : 'Waiting for sensor data'}
+      </p>
+    </article>
   );
 }
