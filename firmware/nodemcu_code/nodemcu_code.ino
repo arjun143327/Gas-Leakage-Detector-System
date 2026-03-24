@@ -3,9 +3,9 @@
 #include <WiFiClient.h>
 #include "secrets.h"
 
-const char* ssid     = SECRET_WIFI_NAME;
-const char* password = SECRET_WIFI_PASSWORD;
-const char* serverUrl = SECRET_SERVER_URL;
+const char* ssid     = "chumma";
+const char* password = "test1234";
+const char* serverUrl = "http://10.135.226.112:5000/api/sensor";
 
 void setup() {
   Serial.begin(9600);

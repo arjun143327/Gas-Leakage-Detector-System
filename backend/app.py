@@ -16,7 +16,10 @@ def receive_sensor():
     save_reading(ppm, status)
     if status in ('WARNING', 'DANGER'):
         save_alert(ppm, status)
-        msg = f'LPG Alert! Status: {status}. Gas level: {ppm}. Check immediately.'
+        if status == 'DANGER':
+            msg = f"🚨 *DANGER: CRITICAL LPG GAS LEAK* 🚨\n\nGas level is dangerously high ({ppm} ppm)!\n\n⚠️ Evacuate the area immediately!\n⚠️ Do not turn on/off electrical switches!\n⚠️ Open windows if safe to do so."
+        else:
+            msg = f"⚠️ *WARNING: Elevated Gas Detected* ⚠️\n\nGas level has crossed the safe threshold ({ppm} ppm).\n\nCheck the kitchen/cylinder for potential leaks and ensure ventilation."
         send_whatsapp(msg)
     return jsonify({'received': True})
 

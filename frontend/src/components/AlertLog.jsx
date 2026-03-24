@@ -1,7 +1,7 @@
 const messages = {
   SAFE: 'System stable',
-  WARNING: 'WhatsApp alert sent',
-  DANGER: 'WhatsApp + buzzer fired',
+  WARNING: 'Gas limit exceeded',
+  DANGER: 'Critical gas level + Buzzer',
 };
 
 const labels = {
